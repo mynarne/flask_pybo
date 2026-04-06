@@ -10,7 +10,9 @@ bp = Blueprint('question', __name__, url_prefix='/question')
 
 @bp.route('/list/')
 def _list():   #  함수명 앞에 언더바 붙으면 직접 실행x
+    page = request.args.get('page', default=1, type=int)  # 페이지 쿼리 스트링 값(url 페이지 값) 가져오기
     question_list = Question.query.order_by(Question.create_date.desc())
+    question_list = question_list.paginate(page=page, per_page=10)   # page 값 받아온 뒤 한 페이지에 10개 씩 출력
     return render_template('question/question_list.html', question_list = question_list)
 
 
