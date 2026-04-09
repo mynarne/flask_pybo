@@ -10,6 +10,7 @@ class Question(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete = 'CASCADE', onupdate = 'CASCADE'), nullable = False) #, server_default = '1') 
                                                                                                                 # server_default 기존 데이터에도 기본값 지정됨
     user = db.relationship('User', backref = db.backref('question_set'))  # User table 연결 - user가 올린 게시물 바로 확인
+    modify_date = db.Column(db.DateTime(), nullable = True)
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +20,7 @@ class Answer(db.Model):
     create_date = db.Column(db.DateTime(), nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete = 'CASCADE', onupdate = 'CASCADE'), nullable = False)
     user = db.relationship('User', backref = db.backref('answer_set'))
+    modify_date = db.Column(db.DateTime(), nullable = True)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
