@@ -32,9 +32,16 @@
             {% if question_list.items %}
             {% for question in question_list %}  <!--     .items()로 현재 페이지 해당 게시물 가져옴      -->
             <tr>
+
                 <!--      게시물 번호 게시물 갯수만큼 출력          -->
                 <td>{{ question_list.total - (question_list.page - 1) * question_list.per_page - loop.index0 }}</td>
                 <td>
+                    {% if question.image_path %}
+                    <!--  게시물 제목 옆 이미지   -->
+
+                    <img src = "{{ url_for('static', filename=question.image_path) }}" alt = 'thumbnail' style = 'width: 30px; height: 30px;' class = 'img-thumbnail'>
+
+                    {% endif %}
                     <a href="{{ url_for('question.detail', question_id = question.id) }}">{{ question.subject }}</a>
                     {% if question.answer_set | length > 0 %}
                     <span class="text-danger small mx-2">[{{ question.answer_set | length }}]</span>

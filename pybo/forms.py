@@ -1,6 +1,7 @@
 from email import message
 
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from flask_wtf.recaptcha import validators
 from wtforms.fields.simple import StringField, TextAreaField, PasswordField, EmailField
 from wtforms.validators import DataRequired, Length, equal_to, EqualTo, Email
@@ -18,6 +19,9 @@ class QuestionForm(FlaskForm):
     # TextArea: HTML form 태그의 TextArea
     # 질문 내용
     content = TextAreaField('내용', validators=[DataRequired('질문 내용은 필수 입력 항목입니다.')])
+
+    # 이미지
+    image = FileField('이미지 업로드', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], '이미지 파일만 업로드 가능합니다.')])
 
 
 # form 모듈의 대답 form 클래스

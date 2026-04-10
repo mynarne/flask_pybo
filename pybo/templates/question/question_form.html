@@ -5,7 +5,8 @@
     <!-- 질문등록 -->
     <div class="container">
         <h5 class="my-3 border-bottom pb-2">질문 등록</h5>
-        <form method="post" novalidate>
+        <form method="post" enctype="multipart/form-data" novalidate>
+                            <!-- enctype 값 없으면 이미지 업로드 되지 않음 -->
             {{ form.csrf_token }}
             <!--   오류표시 Start   -->
             {% if form.errors %}
@@ -29,6 +30,9 @@
 
             {{ form.content.label }}         <!-- <label form = ''>내용</label> -->
             {{ form.content(class="form-control") }}             <!-- <textarea></textarea>  -->
+
+            {{ form.image.label }}          <!-- 이미지 -->
+            {{ form.image(class="form-control") }}
 
             <button type="submit" class="btn btn-primary mt-3">등록하기</button>
         </form>

@@ -11,6 +11,7 @@ class Question(db.Model):
                                                                                                                 # server_default 기존 데이터에도 기본값 지정됨
     user = db.relationship('User', backref = db.backref('question_set'))  # User table 연결 - user가 올린 게시물 바로 확인
     modify_date = db.Column(db.DateTime(), nullable = True)
+    image_path = db.Column(db.String(200), nullable = True)
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)

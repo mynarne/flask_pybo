@@ -1,6 +1,10 @@
-from datetime import datetime
+import os
 
-from flask import Blueprint, render_template, request, redirect, url_for, g, flash
+from datetime import datetime
+from tkinter import Image
+
+from flask import Blueprint, render_template, request, redirect, url_for, g, flash, current_app
+from werkzeug.utils import secure_filename
 
 from pybo import db
 from pybo.forms import QuestionForm, AnswerForm
@@ -49,7 +53,27 @@ def detail(question_id):
 def create():
     form = QuestionForm()
     if request.method == 'POST' and form.validate_on_submit():
-        question = Question(subject = form.subject.data, content=form.content.data, create_date=datetime.now(), user = g.user)
+
+        # form에 전송된 이미지 파일 받아오기
+        image_file = form.image.data
+        image_path = None
+
+        if image_file:
+            # 저장 경로 설정 : 오늘 날짜로 폴더 설정
+            today = datetime.now().strftime('%Y%m%d')
+            upload_folder = os.path.join(current_app.root_path, 'static/photos', today)
+            os.makedirs(upload_folder, exist_ok=True)
+                                        # 경로가 없으면 만들고 있다면 해당 경로에 이미지 저장
+
+            # 파일 저장
+            filename = secure_filename(image_file.filename)
+            file_path = os.path.join(upload_folder, filename)
+            image_file.save(file_path)
+
+            # db에 저장할 파일 경로 ( static 기준 상대경로 )
+            image_path = f'photos/{today}/{filename}'
+
+        question = Question(subject = form.subject.data, content=form.content.data, create_date=datetime.now(), user = g.user, image_path = image_path)
         db.session.add(question)
         db.session.commit()
         return redirect(url_for('main.index'))
